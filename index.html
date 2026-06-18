@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Command Center — demo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/iconfont/tabler-icons.min.css">
+<style>
+:root{
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --border-radius-md:8px; --border-radius-lg:12px;
+  --color-text-primary:#1b2030; --color-text-secondary:#586173; --color-text-tertiary:#727c8c;
+  --color-text-success:#16713f; --color-text-danger:#b22f24; --color-text-warning:#825700; --color-text-info:#1f5fa8;
+  --color-background-primary:#ffffff; --color-background-secondary:#f4f6f9; --color-background-tertiary:#e9edf2;
+  --color-background-success:#e6f4ec; --color-background-danger:#fbeaea; --color-background-warning:#fdf3e1; --color-background-info:#e8f1fb;
+  --color-border-tertiary:rgba(20,30,50,0.10); --color-border-secondary:rgba(20,30,50,0.18); --color-border-primary:rgba(20,30,50,0.30); --color-border-info:#1f5fa8;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --color-text-primary:#e7ecf3; --color-text-secondary:#9aa4b2; --color-text-tertiary:#7a8493;
+    --color-text-success:#5ed08a; --color-text-danger:#ff7a73; --color-text-warning:#ffc35a; --color-text-info:#6fb0f0;
+    --color-background-primary:#161b26; --color-background-secondary:#1d2330; --color-background-tertiary:#272e3d;
+    --color-background-success:#13301d; --color-background-danger:#3a1d1d; --color-background-warning:#3a2e12; --color-background-info:#16263c;
+    --color-border-tertiary:rgba(255,255,255,0.12); --color-border-secondary:rgba(255,255,255,0.20); --color-border-primary:rgba(255,255,255,0.32); --color-border-info:#6fb0f0;
+  }
+  body{background:#0f131c}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-background-tertiary);font-family:var(--font-sans);color:var(--color-text-primary)}
+.page{max-width:980px;margin:0 auto;padding:20px 18px 60px}
+button{cursor:pointer;font-family:inherit}
+input:not([type=range]):not(.cc-mini),select:not(.cc-mini),.cc-chat{height:34px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);border-radius:8px;padding:0 10px;font-size:13px}
+input[type=range]{accent-color:var(--color-text-info)}
+.foot{color:var(--color-text-tertiary);font-size:12px;margin-top:28px;text-align:center;line-height:1.7}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.cc-wrap{font-family:var(--font-sans);color:var(--color-text-primary);font-size:14px;line-height:1.5}
+.cc-pill{border:0.5px solid var(--color-border-secondary);background:transparent;border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--color-text-secondary)}
+.cc-pill.on{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary)}
+.cc-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px}
+.cc-tag{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:3px 9px;border-radius:999px}
+.cc-dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.cc-bar{height:6px;border-radius:999px;background:var(--color-background-tertiary);overflow:hidden}
+.cc-grp{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;margin-bottom:8px}
+.cc-grh{display:flex;align-items:center;gap:9px;padding:11px 13px;cursor:pointer;background:var(--color-background-secondary)}
+.cc-row{display:flex;align-items:flex-start;gap:12px;padding:10px 13px;border-top:0.5px solid var(--color-border-tertiary)}
+.cc-erow{padding:11px 13px;border-top:0.5px solid var(--color-border-tertiary)}
+.cc-mut{color:var(--color-text-secondary)}
+.cc-lbl{font-size:12px;color:var(--color-text-secondary)}
+.cc-pcol{width:84px;flex:none;text-align:right}
+.cc-ed{border-radius:4px;padding:1px 5px;outline:none;cursor:text}
+.cc-ed:hover{background:var(--color-background-secondary)}
+.cc-ed:focus{box-shadow:0 0 0 1px var(--color-border-info);background:var(--color-background-secondary)}
+.cc-mini{font-size:12px;padding:4px 7px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary)}
+.cc-ico{border:0.5px solid var(--color-border-secondary);background:transparent;border-radius:6px;cursor:pointer;color:var(--color-text-secondary);padding:4px 7px;font-size:12px}
+.cc-ico:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+@media(max-width:480px){.page{padding:14px 12px 50px}.cc-pcol{width:100%;text-align:left;margin-top:8px}.cc-row{flex-wrap:wrap}input[type=date].cc-mini{width:auto !important}}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="cc-wrap">
+  <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+    <div>
+      <h1 style="font-size:20px;font-weight:500;margin:0">Command center</h1>
+      <div class="cc-mut" style="font-size:12px">As of Jun 18, 2026 · company health at a glance</div>
+    </div>
+    <div class="cc-tag" id="cc-fresh" style="background:var(--color-background-success);color:var(--color-text-success)"><i class="ti ti-clock" aria-hidden="true"></i> Live</div>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:14px">
+    <div style="display:flex;gap:6px" id="cc-co" role="group" aria-label="Company">
+      <button class="cc-pill on" data-co="all">Overview</button>
+      <button class="cc-pill" data-co="apex">Apex</button>
+      <button class="cc-pill" data-co="vista">Vista</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px;margin-left:auto">
+      <label class="cc-lbl" for="cc-role">Viewing as</label>
+      <select id="cc-role" style="width:auto">
+        <option value="all">Upper management</option>
+        <option value="dev">Development</option>
+        <option value="lines">Lines / Trading</option>
+        <option value="cs">Customer service</option>
+      </select>
+    </div>
+  </div>
+  <main id="cc-app"></main>
+</div>
+<div class="foot">Interactive demo with placeholder data — sample figures, names and projects, not real. Edits are local to this preview and reset on reload.</div>
+</div>
+<script>
+(function(){
+  var TODAY=new Date(2026,5,18);
+  var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var companies={
+    apex:{name:"Apex Sportsbook",sub:"Flagship book",base:0,kpis:[{l:"Active players",v:21450,prev:18300,good:"up"},{l:"System uptime",v:"99.9%",sub:"1 incident"},{l:"CS tickets",v:1180,prev:940,good:"down"}]},
+    vista:{name:"Vista Gaming",sub:"New brand · soft launch",base:4,kpis:[{l:"Active players",v:410,prev:360,good:"up"},{l:"Player P/L",v:-318500,prev:-120000,good:"up",cur:true},{l:"Systems integrated",v:"1 / 4"}]}
+  };
+  var deptName={dev:"Development",lines:"Lines / Trading",cs:"Customer service",launch:"Go-live"};
+  var P=[
+    {co:"apex",dept:"dev",t:"Crypto deposits (USDT / USDC)",o:"Alex R.",d:"2026-04-10",s:"delayed",p:null},
+    {co:"apex",dept:"dev",t:"Odds feed importer fix",o:"Sam K.",d:"2026-04-17",s:"on-track",p:70},
+    {co:"apex",dept:"dev",t:"Risk override controls",o:"Jordan T.",d:"2026-04-17",s:"delayed",p:null},
+    {co:"apex",dept:"dev",t:"Auto line-mover",o:"Sam K.",d:"2026-06-02",s:"on-track",p:0},
+    {co:"apex",dept:"dev",t:"Agent pooling",o:"Dana P.",d:"2026-05-31",s:"on-track",p:0},
+    {co:"apex",dept:"dev",t:"Team totals on main page",o:"Alex R.",d:"2026-04-17",s:"on-track",p:null},
+    {co:"apex",dept:"dev",t:"Odds API export",o:"Jordan T.",d:"2026-04-17",s:"",p:20},
+    {co:"apex",dept:"lines",t:"Live volume tooling",o:"Alex R.",d:"",s:"testing",p:null},
+    {co:"apex",dept:"cs",t:"New hire onboarding",o:"Casey M.",d:"2026-04-17",s:"on-track",p:null},
+    {co:"apex",dept:"cs",t:"Ops manual",o:"Casey M.",d:"2026-08-01",s:"planned",p:null},
+    {co:"vista",dept:"dev",t:"Cashier integration",o:"Robin N.",d:"2026-08-01",s:"on-track",p:null},
+    {co:"vista",dept:"dev",t:"CRM + live chat",o:"Unassigned",d:"",s:"planned",p:null},
+    {co:"vista",dept:"dev",t:"Affiliate platform",o:"Unassigned",d:"",s:"planned",p:null},
+    {co:"vista",dept:"dev",t:"Trader reporting",o:"Unassigned",d:"",s:"planned",p:null},
+    {co:"vista",dept:"launch",t:"Soft launch",o:"Launch team",d:"2026-06-02",s:"on-track",p:null}
+  ];
+  P.forEach(function(p,i){p.id=i;});var nextId=P.length;
+  var meta={"apex|dev":{by:"Sam",d:0.1},"apex|lines":{by:"Alex",d:3},"apex|cs":{by:"Casey",d:1},"vista|dev":{by:"Robin",d:5},"vista|launch":{by:"Launch team",d:9}};
+  var G=[
+    {co:"apex",t:"Q3: +5,000 active players",p:88,sem:"success",sub:"+4,400 of +5,000"},
+    {co:"apex",t:"Top-tier operator by 2027",p:45,sem:"warning",sub:"on pace"},
+    {co:"apex",t:"Be #1 in segment (3-year)",p:35,sem:"neutral",sub:"long term"},
+    {co:"vista",t:"All core systems integrated",p:25,sem:"danger",sub:"1 of 4 underway"},
+    {co:"vista",t:"Scale the player base",p:15,sem:"warning",sub:"410 active"}
+  ];
+  var metricFlags=[{co:"vista",t:"Player P/L worsening",sub:"-$318,500 (from -$120,000)",sem:"danger"},{co:"apex",t:"CS tickets up 26% week-over-week",sub:"1,180 (from 940)",sem:"warning"}];
+  var backlog={apex:18,vista:24};
+  var STATUSES=["on-track","at-risk","delayed","testing","blocked","planned","done"];
+  var state={co:"all",role:"all",open:{},showAgenda:false,showOwner:false,_tt:null,_ft:null};
+
+  function uniq(v,i,a){return a.indexOf(v)===i;}
+  function fmtNum(n){return Math.round(n).toLocaleString("en-US");}
+  function fmtCur(n){return (n<0?"-":"")+"$"+fmtNum(Math.abs(n));}
+  function fmtDate(d){var p=d.split("-");return MON[+p[1]-1]+" "+(+p[2]);}
+  function parseD(d){var p=d.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
+  function daysOver(d){if(!d)return -1;return Math.round((TODAY-parseD(d))/86400000);}
+  function fmtAgo(d){if(d==null)return "not updated this week";if(d===0)return "just now";if(d<1)return Math.round(d*24)+"h ago";return Math.round(d)+"d ago";}
+  function freshSem(d){return (d==null||d>=7)?"danger":(d>=3?"warning":"success");}
+  function semText(s){return s==="neutral"?"var(--color-text-tertiary)":"var(--color-text-"+s+")";}
+  function semBg(s){return s==="neutral"?"var(--color-background-secondary)":"var(--color-background-"+s+")";}
+  function dot(s){return '<span class="cc-dot" style="background:'+semText(s)+'"></span>';}
+  function pill(l,s){return '<span class="cc-tag" style="background:'+semBg(s)+';color:'+semText(s)+'">'+l+'</span>';}
+  function bar(p,s){return '<div class="cc-bar"><div style="height:100%;width:'+p+'%;background:'+semText(s)+'"></div></div>';}
+  function statusMeta(s){return ({"on-track":{l:"On track",sem:"success"},testing:{l:"Testing",sem:"info"},"at-risk":{l:"At risk",sem:"warning"},delayed:{l:"Delayed",sem:"danger"},blocked:{l:"Blocked",sem:"danger"},planned:{l:"Planned",sem:"neutral"},done:{l:"Done",sem:"success"}})[s]||{l:"",sem:"neutral"};}
+  function verdictMeta(v){return ({"on-track":{l:"On track",sem:"success"},watch:{l:"Watch",sem:"warning"},risk:{l:"At risk",sem:"danger"}})[v];}
+  function isOverdue(p){return daysOver(p.d)>0&&p.s!=="done";}
+  function computeVerdict(co){var ps=P.filter(function(x){return x.co===co;});var od=ps.filter(isOverdue).length;var ar=ps.filter(function(x){return x.s==="at-risk"||x.s==="blocked";}).filter(function(x){return !isOverdue(x);}).length;var sc=od+ar+(companies[co].base||0);return sc>=5?"risk":(sc>=1?"watch":"on-track");}
+  function computeNote(co){var ps=P.filter(function(x){return x.co===co;});var od=ps.filter(isOverdue).length;if(co==="vista")return "Pre-launch — 1 of 4 systems integrated"+(od?"; "+od+" item"+(od>1?"s":"")+" overdue":"")+".";return od?(od+" item"+(od>1?"s":"")+" past due; KPIs otherwise healthy."):"All tracked work on schedule.";}
+  function delta(v,prev,good,cur){if(typeof v!=="number"||prev==null||prev===0)return "";var d=v-prev,pct=Math.round(d/Math.abs(prev)*100),up=d>0,isGood=(good==="up"&&up)||(good==="down"&&!up),sem=isGood?"success":"warning",ar=up?"ti-arrow-up":"ti-arrow-down",val=cur?fmtCur(d):((d>0?"+":"")+fmtNum(d));return '<span style="font-size:12px;color:'+semText(sem)+'"><i class="ti '+ar+'" aria-hidden="true"></i> '+val+" ("+Math.abs(pct)+'%)<span class="sr-only"> '+(up?"up":"down")+"</span></span>";}
+  function pctCell(pr){if(pr.p==null)return '<div class="cc-pcol"><span class="cc-mut" style="font-size:12px">'+(pr.s==="testing"?"Testing":pr.s==="planned"?"Planned":"—")+'</span></div>';var sm=statusMeta(pr.s);return '<div class="cc-pcol"><div style="font-size:12px;font-weight:500;margin-bottom:4px">'+pr.p+'%</div>'+bar(pr.p,sm.sem)+"</div>";}
+
+  function kpi(k){var vt=k.cur?fmtCur(k.v):(typeof k.v==="number"?fmtNum(k.v):k.v);return '<div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px 11px"><div class="cc-lbl" style="font-size:11px">'+k.l+'</div><div style="font-size:16px;font-weight:500;margin:2px 0">'+vt+'</div>'+(k.prev!=null?delta(k.v,k.prev,k.good,k.cur):(k.sub?'<span class="cc-mut" style="font-size:12px">'+k.sub+'</span>':''))+'</div>';}
+  function healthCard(co){var c=companies[co],vm=verdictMeta(computeVerdict(co));return '<section class="cc-card"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="flex:1"><div style="font-weight:500;font-size:15px">'+c.name+'</div><div class="cc-mut" style="font-size:12px">'+c.sub+'</div></div><span class="cc-tag" style="background:'+semBg(vm.sem)+';color:'+semText(vm.sem)+';font-size:13px;padding:5px 11px">'+dot(vm.sem)+" "+vm.l+'</span></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px">'+c.kpis.map(kpi).join("")+'</div><div class="cc-mut" style="font-size:12.5px;margin-top:10px">'+computeNote(co)+'</div></section>';}
+  function projRow(pr){var sm=statusMeta(pr.s),od=daysOver(pr.d),dl;if(pr.d){dl=od>0&&pr.s!=="done"?'<span class="cc-tag" style="background:var(--color-background-danger);color:var(--color-text-danger)"><i class="ti ti-calendar" aria-hidden="true"></i> '+od+'d overdue</span>':'<span class="cc-mut" style="font-size:12px"><i class="ti ti-calendar" aria-hidden="true"></i> due '+fmtDate(pr.d)+'</span>';}else{dl='<span class="cc-mut" style="font-size:12px">no date</span>';}var tt=pr.s==="done"?'text-decoration:line-through;color:var(--color-text-secondary)':'';return '<div class="cc-row"><div style="flex:1;min-width:0"><div style="font-weight:500;'+tt+'">'+pr.t+'</div><div style="display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin-top:5px"><span class="cc-mut" style="font-size:12px"><i class="ti ti-user" aria-hidden="true"></i> '+pr.o+"</span>"+dl+(sm.l?pill(sm.l,sm.sem):"")+'</div></div>'+pctCell(pr)+"</div>";}
+  function group(co,dept,projs){var key=co+"|"+dept,open=!!state.open[key],over=projs.filter(isOverdue).length,roll=over>0?"danger":(projs.some(function(p){return p.s==="at-risk"||p.s==="blocked"||p.s==="delayed";})?"warning":"success");var m=meta[key],fr=m?fmtAgo(m.d):"not updated this week",fs=m?freshSem(m.d):"danger";return '<div class="cc-grp"><div class="cc-grh" data-grp="'+key+'" role="button" tabindex="0"><i class="ti ti-chevron-'+(open?"down":"right")+'" aria-hidden="true"></i>'+dot(roll)+'<span style="font-weight:500">'+deptName[dept]+'</span><span class="cc-mut" style="font-size:12px">'+projs.length+" · <i class=\"ti ti-clock\" aria-hidden=\"true\" style=\"color:"+semText(fs)+"\"></i> "+fr+(m?" · "+m.by:"")+"</span>"+(over>0?'<span class="cc-tag" style="margin-left:auto;background:var(--color-background-danger);color:var(--color-text-danger)">'+over+" overdue</span>":'<span style="margin-left:auto"></span>')+"</div>"+(open?projs.map(projRow).join(""):"")+"</div>";}
+
+  function srSummary(cos){var t=cos.map(function(co){var od=P.filter(function(x){return x.co===co&&isOverdue(x);}).length;return companies[co].name+": "+verdictMeta(computeVerdict(co)).l+", "+od+" overdue.";}).join(" ");return '<div class="sr-only">Company health summary. '+t+"</div>";}
+  function buildHealth(cos){return '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px">'+cos.map(healthCard).join("")+"</div>";}
+  function buildAISummary(cos){var b=[];cos.forEach(function(co){var ps=P.filter(function(x){return x.co===co;});var od=ps.filter(isOverdue).slice().sort(function(a,c){return daysOver(c.d)-daysOver(a.d);});var v=verdictMeta(computeVerdict(co)).l;if(co==="apex"){var k=companies.apex.kpis[0];var dp=Math.round((k.v-k.prev)/k.prev*100);b.push('<span style="font-weight:500">Apex — '+v+'.</span> '+(od.length?od.length+" item"+(od.length>1?"s":"")+" past due (oldest: "+od[0].t+", "+daysOver(od[0].d)+"d). ":"")+"Players +"+dp+"% to "+fmtNum(k.v)+", uptime 99.9%.");}else{b.push('<span style="font-weight:500">Vista — '+v+'.</span> Pre-launch: 1 of 4 systems integrated; player P/L -$318,500 (worsening).'+(od.length?" "+od.length+" item"+(od.length>1?"s":"")+" overdue.":""));}});var all=P.filter(function(p){return cos.indexOf(p.co)>=0;});var worst=all.filter(isOverdue).slice().sort(function(a,c){return daysOver(c.d)-daysOver(a.d);})[0];if(worst)b.push('<span style="font-weight:500">Needs a decision:</span> '+worst.t+" — "+worst.o+" ("+daysOver(worst.d)+"d overdue).");var keys=[];cos.forEach(function(co){["dev","lines","cs","launch"].forEach(function(dp){if(P.some(function(x){return x.co===co&&x.dept===dp;}))keys.push(co+"|"+dp);});});var stale=keys.filter(function(k){return freshSem(meta[k]?meta[k].d:null)!=="success";}).map(function(k){return deptName[k.split("|")[1]];}).filter(uniq);b.push(stale.length?('<span style="font-weight:500">Awaiting updates:</span> '+stale.join(", ")+"."):'<span style="font-weight:500">All teams updated this week.</span>');return '<section class="cc-card" style="margin-top:12px"><div style="display:flex;align-items:center;gap:7px;font-weight:500;margin-bottom:8px"><i class="ti ti-bolt" aria-hidden="true" style="color:var(--color-text-info)"></i> This week <span class="cc-tag" style="background:var(--color-background-info);color:var(--color-text-info);font-size:11px">auto-summary</span></div>'+b.map(function(x){return '<div style="display:flex;gap:8px;margin:6px 0;font-size:13px;line-height:1.5"><span style="color:var(--color-text-tertiary)">•</span><span>'+x+"</span></div>";}).join("")+"</section>";}
+  function buildToolbar(){return '<div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 2px"><button class="cc-pill'+(state.showAgenda?" on":"")+'" data-tg="agenda"><i class="ti ti-calendar" aria-hidden="true"></i> Tuesday agenda</button><button class="cc-pill'+(state.showOwner?" on":"")+'" data-tg="owner"><i class="ti ti-users" aria-hidden="true"></i> By owner</button></div><div id="cc-toast" role="status" aria-live="polite" style="margin:6px 0"></div>';}
+  function buildAgenda(cos){var ord=["dev","lines","cs","launch"],blocks="";cos.forEach(function(co){ord.forEach(function(dp){var ps=P.filter(function(x){return x.co===co&&x.dept===dp;});if(!ps.length)return;var od=ps.filter(isOverdue),ar=ps.filter(function(p){return (p.s==="at-risk"||p.s==="blocked"||p.s==="delayed")&&!isOverdue(p);}),dn=ps.filter(function(p){return p.s==="done";});if(!od.length&&!ar.length&&!dn.length)return;var li="";od.forEach(function(p){li+='<div style="font-size:13px;margin:3px 0"><span style="color:var(--color-text-danger)">&rarr;</span> '+p.t+" — "+p.o+" ("+daysOver(p.d)+"d overdue)</div>";});ar.forEach(function(p){li+='<div style="font-size:13px;margin:3px 0"><span style="color:var(--color-text-warning)">&rarr;</span> '+p.t+" — "+p.o+" ("+statusMeta(p.s).l.toLowerCase()+")</div>";});dn.forEach(function(p){li+='<div style="font-size:13px;margin:3px 0;color:var(--color-text-secondary)"><span style="color:var(--color-text-success)">&check;</span> '+p.t+" — shipped</div>";});blocks+='<div style="margin:8px 0"><div style="font-weight:500;font-size:13px">'+deptName[dp]+(cos.length>1?' <span class="cc-mut" style="font-weight:400">· '+companies[co].name+"</span>":"")+"</div>"+li+"</div>";});});if(!blocks)blocks='<div class="cc-mut" style="font-size:13px">Nothing flagged — quick check-in.</div>';return '<section class="cc-card" style="margin:10px 0"><div style="display:flex;align-items:center;gap:7px;font-weight:500;margin-bottom:4px"><i class="ti ti-calendar" aria-hidden="true"></i> Tuesday meeting agenda <span class="cc-mut" style="font-size:12px;font-weight:400">auto-built from status</span></div>'+blocks+"</section>";}
+  function buildByOwner(cos){var flagged=P.filter(function(p){return cos.indexOf(p.co)>=0&&(isOverdue(p)||p.s==="at-risk"||p.s==="blocked");});var by={};flagged.forEach(function(p){p.o.split("/").forEach(function(name){name=name.trim();if(!name)return;(by[name]=by[name]||[]).push(p);});});var owners=Object.keys(by).sort(function(a,c){return by[c].length-by[a].length;});if(!owners.length)return '<section class="cc-card" style="margin:10px 0"><div class="cc-mut" style="font-size:13px">No one is behind — nothing overdue or at risk.</div></section>';var rows=owners.map(function(o){var items=by[o].map(function(p){var od=isOverdue(p);return '<div style="font-size:13px;margin:3px 0"><span style="color:'+(od?"var(--color-text-danger)":"var(--color-text-warning)")+'">•</span> '+p.t+" — "+(od?daysOver(p.d)+"d overdue":statusMeta(p.s).l.toLowerCase())+(cos.length>1?' <span class="cc-mut">('+companies[p.co].name+")</span>":"")+"</div>";}).join("");return '<div style="margin:8px 0"><div style="display:flex;align-items:center;gap:8px"><i class="ti ti-user cc-mut" aria-hidden="true"></i><span style="font-weight:500">'+o+'</span><span class="cc-tag" style="background:var(--color-background-danger);color:var(--color-text-danger)">'+by[o].length+" flagged</span></div>"+items+"</div>";}).join("");return '<section class="cc-card" style="margin:10px 0"><div style="display:flex;align-items:center;gap:7px;font-weight:500;margin-bottom:4px"><i class="ti ti-users" aria-hidden="true"></i> Who&rsquo;s behind (by owner)</div>'+rows+"</section>";}
+  function buildAttention(cos){var items=[];P.forEach(function(p){if(cos.indexOf(p.co)<0)return;if(isOverdue(p))items.push({co:p.co,t:p.t,sub:p.o+" · "+daysOver(p.d)+" days overdue",sem:"danger"});else if(p.s==="at-risk"||p.s==="blocked")items.push({co:p.co,t:p.t,sub:p.o+" · "+statusMeta(p.s).l.toLowerCase(),sem:"warning"});});metricFlags.forEach(function(m){if(cos.indexOf(m.co)>=0)items.push(m);});items.sort(function(a,b){return (a.sem==="danger"?0:1)-(b.sem==="danger"?0:1);});if(!items.length)return '<section class="cc-card" style="margin:14px 0"><div style="display:flex;align-items:center;gap:7px;font-weight:500"><i class="ti ti-check" aria-hidden="true" style="color:var(--color-text-success)"></i> Nothing needs attention</div></section>';var rows=items.map(function(it){return '<div style="display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-top:0.5px solid var(--color-border-tertiary)">'+dot(it.sem)+'<div style="flex:1"><div style="font-weight:500;font-size:13.5px">'+it.t+'</div><div class="cc-mut" style="font-size:12px">'+it.sub+(cos.length>1?" · "+companies[it.co].name:"")+"</div></div></div>";}).join("");return '<section class="cc-card" style="margin:14px 0"><div style="display:flex;align-items:center;gap:7px;font-weight:500"><i class="ti ti-bell" aria-hidden="true" style="color:var(--color-text-danger)"></i> Needs attention <span class="cc-mut" style="font-size:12px;font-weight:400">'+items.length+"</span></div>"+rows+"</section>";}
+  function buildGoals(cos){var gs=G.filter(function(g){return cos.indexOf(g.co)>=0;});if(!gs.length)return "";var rows=gs.map(function(g){return '<div style="margin:10px 0"><div style="display:flex;justify-content:space-between;gap:10px;font-size:13px"><span>'+g.t+(cos.length>1?' <span class="cc-mut">· '+companies[g.co].name+"</span>":"")+'</span><span class="cc-mut">'+g.sub+'</span></div><div style="margin-top:5px">'+bar(g.p,g.sem)+"</div></div>";}).join("");return '<div style="margin:18px 0 4px;font-weight:500;display:flex;align-items:center;gap:7px"><i class="ti ti-star" aria-hidden="true"></i> Quarterly goals</div>'+rows;}
+  function buildProjects(cos){var ord=["dev","lines","cs","launch"],keys=[];cos.forEach(function(co){ord.forEach(function(dp){if(P.some(function(x){return x.co===co&&x.dept===dp;}))keys.push(co+"|"+dp);});});var stale=keys.filter(function(k){return freshSem(meta[k]?meta[k].d:null)!=="success";});var sn=stale.map(function(k){return deptName[k.split("|")[1]];}).filter(uniq);var summ='<span class="cc-mut" style="font-size:12px">'+(keys.length-stale.length)+" of "+keys.length+" teams updated recently"+(sn.length?" · "+sn.join(", ")+" need an update":"")+"</span>"+(sn.length?' <button class="cc-ico" data-nudge="'+sn.join(", ")+'" style="margin-left:2px"><i class="ti ti-bell" aria-hidden="true"></i> Nudge</button>':"");var h='<div style="margin:18px 0 8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="font-weight:500;display:flex;align-items:center;gap:7px"><i class="ti ti-folder" aria-hidden="true"></i> Projects by department</span>'+summ+'</div>';cos.forEach(function(co){if(cos.length>1)h+='<div class="cc-lbl" style="margin:10px 0 6px">'+companies[co].name+"</div>";ord.forEach(function(dp){var pr=P.filter(function(x){return x.co===co&&x.dept===dp;});if(pr.length)h+=group(co,dp,pr);});});return h;}
+  function buildDrill(cos){var n=cos.reduce(function(a,co){return a+backlog[co];},0);return '<div style="display:flex;flex-wrap:wrap;gap:8px;margin:16px 0"><button class="cc-pill" data-act="drill"><i class="ti ti-folder" aria-hidden="true"></i> Backlog ('+n+')</button><button class="cc-pill" data-act="drill"><i class="ti ti-clock" aria-hidden="true"></i> History &amp; trends</button><button class="cc-pill" data-act="drill"><i class="ti ti-check" aria-hidden="true"></i> Completed this week</button></div><div id="cc-note"></div>';}
+  function buildChat(){return '<section class="cc-card" style="margin-top:14px"><div style="display:flex;gap:8px;align-items:center"><input id="cc-chatin" class="cc-chat" placeholder="Ask the dashboard…" aria-label="Ask the dashboard" style="flex:1"/><button class="cc-pill" id="cc-chatsend" aria-label="Send"><i class="ti ti-arrow-right" aria-hidden="true"></i></button></div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"><button class="cc-pill" data-q="overdue" style="font-size:12px;padding:4px 10px">What\'s overdue?</button><button class="cc-pill" data-q="vista" style="font-size:12px;padding:4px 10px">How is Vista doing?</button></div><div class="cc-mut" style="font-size:11px;margin-top:8px">Preview — not wired to live data. The real version answers from a defined metrics layer.</div><div id="cc-chatout"></div></section>";}
+
+  function editRow(pr){var sm=statusMeta(pr.s),od=daysOver(pr.d),done=pr.s==="done";var opts=STATUSES.map(function(s){return '<option value="'+s+'"'+(s===pr.s?" selected":"")+'>'+statusMeta(s).l+"</option>";}).join("");var overdue=od>0&&!done?'<span class="cc-tag" style="background:var(--color-background-danger);color:var(--color-text-danger)">'+od+"d overdue</span>":"";var pv=pr.p==null?0:pr.p,pl=pr.p==null?"—":pr.p+"%";return '<div class="cc-erow"><div style="display:flex;align-items:center;gap:9px">'+dot(sm.sem)+'<span class="cc-ed" contenteditable data-edit="title" data-id="'+pr.id+'" style="flex:1;font-weight:500;'+(done?"text-decoration:line-through;color:var(--color-text-secondary)":"")+'">'+pr.t+'</span><button class="cc-ico" data-act="done" data-id="'+pr.id+'" title="'+(done?"Reopen":"Mark done")+'"><i class="ti ti-check" aria-hidden="true" style="'+(done?"color:var(--color-text-success)":"")+'"></i></button><button class="cc-ico" data-act="del" data-id="'+pr.id+'" aria-label="Remove"><i class="ti ti-x" aria-hidden="true"></i></button></div><div style="display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:8px"><span class="cc-mut" style="font-size:12px"><i class="ti ti-user" aria-hidden="true"></i> <span class="cc-ed" contenteditable data-edit="owner" data-id="'+pr.id+'">'+pr.o+'</span></span><input type="date" class="cc-mini" data-edit="deadline" data-id="'+pr.id+'" value="'+(pr.d||"")+'" style="width:140px"/><select class="cc-mini" data-edit="status" data-id="'+pr.id+'">'+opts+'</select><span style="display:inline-flex;align-items:center;gap:7px"><input type="range" min="0" max="100" step="5" value="'+pv+'" data-edit="pct" data-id="'+pr.id+'" aria-label="Progress percent" style="width:108px"/><span class="cc-mut" style="font-size:12px;min-width:34px" data-pctout="'+pr.id+'">'+pl+'</span></span>'+overdue+'</div></div>';}
+  function roleView(cos){var r=state.role,dn=deptName[r];var h='<section class="cc-card" style="background:var(--color-background-info);border:none;margin-bottom:12px"><div style="display:flex;gap:8px;align-items:flex-start"><i class="ti ti-pencil" aria-hidden="true" style="color:var(--color-text-info)"></i><div style="font-size:13px;color:var(--color-text-info)"><span style="font-weight:500">'+dn+' workspace</span> — your team\'s view. Edit your own projects below; changes save automatically and roll up to the company overview. Other teams can\'t see or change your section.</div></div></section>';var pr=P.filter(function(p){return p.dept===r&&cos.indexOf(p.co)>=0;});var od=pr.filter(isOverdue).length,dn2=pr.filter(function(p){return p.s==="done";}).length;h+='<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:4px 0 8px"><span style="font-weight:500;display:flex;align-items:center;gap:7px"><i class="ti ti-folder" aria-hidden="true"></i> '+dn+' — your projects</span><span class="cc-mut" style="font-size:12px">'+pr.length+" total · "+od+" overdue · "+dn2+" done</span></div>";if(!pr.length){h+='<div class="cc-mut" style="margin-bottom:10px">No projects yet. Add your first below.</div>';}else{cos.forEach(function(co){var cp=pr.filter(function(x){return x.co===co;});if(!cp.length)return;if(cos.length>1)h+='<div class="cc-lbl" style="margin:8px 0 4px">'+companies[co].name+"</div>";h+='<div class="cc-grp">'+cp.map(editRow).join("")+"</div>";});}h+='<button class="cc-pill" data-act="add" style="margin-top:4px"><i class="ti ti-plus" aria-hidden="true"></i> Add a project</button>';return h;}
+
+  var app=document.getElementById("cc-app");
+  function touch(co,dept){meta[co+"|"+dept]={by:"you",d:0};var f=document.getElementById("cc-fresh");if(f){f.innerHTML='<i class="ti ti-check" aria-hidden="true"></i> Saved';clearTimeout(state._ft);state._ft=setTimeout(function(){var g=document.getElementById("cc-fresh");if(g)g.innerHTML='<i class="ti ti-clock" aria-hidden="true"></i> Live';},2500);}}
+  function byId(id){for(var i=0;i<P.length;i++)if(P[i].id===id)return P[i];return null;}
+  function showToast(msg){var el=document.getElementById("cc-toast");if(!el)return;el.innerHTML='<span class="cc-tag" style="background:var(--color-background-info);color:var(--color-text-info)"><i class="ti ti-bell" aria-hidden="true"></i> '+msg+"</span>";clearTimeout(state._tt);state._tt=setTimeout(function(){var e=document.getElementById("cc-toast");if(e)e.innerHTML="";},3500);}
+  function render(){var cos=state.co==="all"?["apex","vista"]:[state.co];if(state.role!=="all"){app.innerHTML=roleView(cos);bindWorkspace();return;}app.innerHTML=srSummary(cos)+buildHealth(cos)+buildAISummary(cos)+buildToolbar()+(state.showAgenda?buildAgenda(cos):"")+(state.showOwner?buildByOwner(cos):"")+buildAttention(cos)+buildGoals(cos)+buildProjects(cos)+buildDrill(cos)+buildChat();bindGroups();bindDrill();bindChat();bindToolbar();bindNudge();}
+  function bindGroups(){app.querySelectorAll("[data-grp]").forEach(function(g){var f=function(){var k=g.getAttribute("data-grp");state.open[k]=!state.open[k];render();};g.onclick=f;g.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();f();}};});}
+  function bindToolbar(){app.querySelectorAll("[data-tg]").forEach(function(b){b.onclick=function(){var t=b.getAttribute("data-tg");if(t==="agenda")state.showAgenda=!state.showAgenda;else state.showOwner=!state.showOwner;render();};});}
+  function bindNudge(){app.querySelectorAll("[data-nudge]").forEach(function(b){b.onclick=function(){showToast("Reminder sent to "+b.getAttribute("data-nudge")+" — update before Tuesday.");};});}
+  function bindDrill(){app.querySelectorAll('[data-act="drill"]').forEach(function(b){b.onclick=function(){var n=document.getElementById("cc-note");if(n)n.innerHTML='<div class="cc-mut" style="font-size:12.5px;padding:4px 2px 10px">Drill-down — opens the full detail in the real build. Kept off the overview so it stays one glanceable page.</div>';};});}
+  function bindChat(){var s=document.getElementById("cc-chatsend"),i=document.getElementById("cc-chatin");if(s)s.onclick=function(){chatAnswer("free");};if(i)i.onkeydown=function(e){if(e.key==="Enter")chatAnswer("free");};app.querySelectorAll("[data-q]").forEach(function(b){b.onclick=function(){chatAnswer(b.getAttribute("data-q"));};});}
+  function chatAnswer(q){var out=document.getElementById("cc-chatout");if(!out)return;var t;if(q==="overdue"){var ov=P.filter(isOverdue).slice().sort(function(a,c){return daysOver(c.d)-daysOver(a.d);});t=ov.length?('<span style="font-weight:500">'+ov.length+" items are past due:</span><br>"+ov.map(function(p){return "• "+p.t+" — "+p.o+" ("+daysOver(p.d)+"d, "+companies[p.co].name+")";}).join("<br>")):"Nothing is overdue right now.";}else if(q==="vista"){t='Vista is <span style="font-weight:500">'+verdictMeta(computeVerdict("vista")).l.toLowerCase()+'</span>: pre-launch with 1 of 4 core systems integrated and player P/L at -$318,500. Active players up slightly to 410.';}else{t="In the real build this answers from a defined metrics layer (not the raw data) so the numbers stay consistent. For the demo, try the suggested questions.";}out.innerHTML='<div style="margin-top:10px;padding:10px 12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:13px;line-height:1.6"><i class="ti ti-message-circle" aria-hidden="true" style="color:var(--color-text-secondary)"></i> '+t+"</div>";}
+  function bindWorkspace(){
+    app.querySelectorAll('[data-edit="title"]').forEach(function(e){e.onblur=function(){var p=byId(+e.getAttribute("data-id"));if(p){p.t=e.textContent.trim()||"Untitled";touch(p.co,p.dept);}};});
+    app.querySelectorAll('[data-edit="owner"]').forEach(function(e){e.onblur=function(){var p=byId(+e.getAttribute("data-id"));if(p){p.o=e.textContent.trim()||"Unassigned";touch(p.co,p.dept);}};});
+    app.querySelectorAll('[data-edit="status"]').forEach(function(e){e.onchange=function(){var p=byId(+e.getAttribute("data-id"));if(p){p.s=e.value;if(p.s==="done")p.p=100;touch(p.co,p.dept);render();}};});
+    app.querySelectorAll('[data-edit="deadline"]').forEach(function(e){e.onchange=function(){var p=byId(+e.getAttribute("data-id"));if(p){p.d=e.value;touch(p.co,p.dept);render();}};});
+    app.querySelectorAll('[data-edit="pct"]').forEach(function(e){e.oninput=function(){var o=app.querySelector('[data-pctout="'+e.getAttribute("data-id")+'"]');if(o)o.textContent=e.value+"%";};e.onchange=function(){var p=byId(+e.getAttribute("data-id"));if(p){p.p=+e.value;touch(p.co,p.dept);render();}};});
+    app.querySelectorAll('[data-act="done"]').forEach(function(b){b.onclick=function(){var p=byId(+b.getAttribute("data-id"));if(p){if(p.s==="done"){p.s="on-track";}else{p.s="done";p.p=100;}touch(p.co,p.dept);render();}};});
+    app.querySelectorAll('[data-act="del"]').forEach(function(b){b.onclick=function(){var id=+b.getAttribute("data-id"),p=byId(id);if(p){P=P.filter(function(x){return x.id!==id;});touch(p.co,p.dept);render();}};});
+    var add=app.querySelector('[data-act="add"]');if(add)add.onclick=function(){var cos=state.co==="all"?["apex","vista"]:[state.co];var co=cos.length===1?cos[0]:"apex";P.push({id:nextId++,co:co,dept:state.role,t:"New project",o:"You",d:"",s:"on-track",p:0});touch(co,state.role);render();};
+  }
+  document.querySelectorAll("#cc-co [data-co]").forEach(function(b){b.onclick=function(){state.co=b.getAttribute("data-co");document.querySelectorAll("#cc-co [data-co]").forEach(function(x){x.classList.toggle("on",x===b);});render();};});
+  document.getElementById("cc-role").onchange=function(e){state.role=e.target.value;render();};
+  render();
+})();
+</script>
+</body>
+</html>
